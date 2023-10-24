@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.study.springboot.dto.BoardDto;
+import com.study.springboot.dto.ReplyDto;
 import com.study.springboot.service.BoardSericeImple;
 
 @Controller
@@ -65,9 +67,18 @@ public class MyController {
 
 	@RequestMapping("/contentForm")
 	public String contentForm(@RequestParam("board_idx") String board_idx, Model model) {
-
+		int hit_rs = 0;
+		//조회수 증가
+		hit_rs = boardSericeImple.hit(board_idx);
+		if(hit_rs == 1) {
+			System.out.println("조회수 증가!");
+		}
+		
+		List<ReplyDto> r_list =  boardSericeImple.reply_list(board_idx);
+		
 		BoardDto dto = boardSericeImple.viewDto(board_idx);
 		model.addAttribute("dto", dto);
+		model.addAttribute("reply_list", r_list);
 		return "contentForm"; // contentFrom으로 디스패치
 	}
 
@@ -85,10 +96,44 @@ public class MyController {
 	}
 	
 	
+	@RequestMapping("/updateAction")
+	@ResponseBody
+	public String updateAction(HttpServletRequest request) {
+		int result = 0;
+		
+		String board_idx = request.getParameter("board_idx");
+		String board_hit = request.getParameter("board_hit");
+		String board_name = request.getParameter("board_name");
+		String board_title = request.getParameter("board_title");
+		String board_content = request.getParameter("board_content");
+		
+		result = boardSericeImple.updateboard(board_idx, board_name, board_title, board_content, board_hit);
+		if(result == 1) {
+			System.out.println("성공적인 글수정입니다!");
+			request.getSession().setAttribute("alert_message", "글 수정 성공!");
+			return "<script>alert('글쓰기 성공!'); location.href='/listForm'</script>";
+		}else {
+			System.out.println("글수정 실패!");
+			return "redirect:listForm";
+		}
+	}
+	//댓글 등록
+	@RequestMapping("/writeReplyAction")
+	public String writeReplyAction(@RequestParam("board_idx") String board_idx,
+								   @RequestParam("reply_content") String reply_content,
+								   @RequestParam("reply_name") String reply_name) {
+		boardSericeImple.replyWrite(reply_name,reply_content,board_idx);
+		return "redirect:contentForm?board_idx=" + board_idx;
+	}
 	
 	
-	
-	
+//	deleteReplyAction?reply_idx=${reply_dto.reply_idx}&board_idx=${dto.board_idx}
+	@RequestMapping("/deleteReplyAction")
+	public String deleteReplyAction(@RequestParam("reply_idx") String reply_idx,
+								    @RequestParam("board_idx") String board_idx) {
+		boardSericeImple.deleteReply(reply_idx);
+		return "redirect:contentForm?board_idx=" + board_idx;
+	}
 	
 	
 	

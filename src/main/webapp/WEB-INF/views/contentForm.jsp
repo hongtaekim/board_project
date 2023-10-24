@@ -28,16 +28,16 @@
 			</tr>
 			<tr>
                 <td>이름</td>
-                <td><input type="text" name="board_name" value="${dto.board_name }" size="50" readonly></td>
+                <td><input type="text" name="board_name" value="${dto.board_name }" size="50"></td>
             </tr>
             <tr>
                 <td>제목</td>
-                <td><input type="text" name="board_title" value="${dto.board_title}" size="50" readonly></td>
+                <td><input type="text" name="board_title" value="${dto.board_title}" size="50"></td>
             </tr>
             <tr>
                 <td>내용</td>
                 <td>
-                    <textarea id="content" name="board_content" cols="50" rows="10" readonly>${dto.board_content }</textarea>
+                    <textarea id="content" name="board_content" cols="50" rows="10">${dto.board_content }</textarea>
                 </td>
             </tr>
             <tr>
@@ -50,5 +50,38 @@
             </tr>
 		</table>	
 	</form>
+	<br>
+       <form action="writeReplyAction?board_idx=${dto.board_idx }" method="post">
+            <table class="reply_write_table" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td colspan="2">
+                        <label for="rp_content">댓글</label><textarea name="reply_content" id="rp_content" cols="60" rows="2"></textarea><br>
+                        <label for="rp_name">별명</label><input type="text" name="reply_name" value="">
+                        <input type="submit" value="댓글달기" id="write_reply_bt">
+                    </td>
+                </tr>
+            </table>
+       </form>
+       <br>
+       <table class="reply_table" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>별명</th>
+                <th>내용</th>
+                <th>날짜</th>
+                <th>삭제</th>
+            </tr>
+            <c:forEach var="reply_dto" items="${reply_list}">
+            	<tr class="reply_stlye">
+            		<td>${reply_dto.reply_name}</td>
+            		<td>${reply_dto.reply_content}</td>
+            		<td>
+            			<c:set var="dateVar" value="${reply_dto.reply_date}"/>
+            			<fmt:formatDate value="${dateVar}" pattern="yyyy-MM-dd"/>	
+            			</td>
+            		<td><a href="deleteReplyAction?reply_idx=${reply_dto.reply_idx}&board_idx=${dto.board_idx}"><button id="reply_delete">삭제</button></a></td>
+            	</tr>
+            </c:forEach>
+            
+        </table>
 </body>
 </html>

@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script defer type="text/javascript" src="${path}/resources/javascript/listForm.js"></script>
 <link rel="stylesheet" href="${path}/resources/css/listForm.css"/>
 <meta charset="UTF-8">
 <title>게시판 목록보기</title>

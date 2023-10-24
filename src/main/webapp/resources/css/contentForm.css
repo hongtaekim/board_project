@@ -16,7 +16,7 @@ h2 {
     color: #333;
 }
 
-form {
+form{
     width: 50%;
     margin: 0 auto;
     background-color: #fff;
@@ -28,14 +28,20 @@ form {
 	text-align:left !important;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
 
 td {
     padding: 10px;
+}
+.reply_table{
+	width: 50%;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+}
+.reply_style{
+	    text-align: center;
 }
 
 
@@ -62,22 +68,34 @@ input[type="submit"], input[type="button"] {
 td.buttons{
     text-align: right;
 }
+#write_reply_bt{
+	float:right;
+}
+
+#reply_delete{
+	padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 
 input[type="submit"]:hover, input[type="button"]:hover {
     background-color: #555;
 }
 
 @media (max-width: 1024px) {
-    form {
+    form .reply_table{
         width: 100%;
     }
 	
-    td {
+    td .reply_table{
         display: block;
         width: 100%;
     }
 
-    input[type="text"], textarea {
+    input[type="text"], textarea .reply_table{
         width: 100%;
     }
 }

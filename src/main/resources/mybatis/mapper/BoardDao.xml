@@ -9,8 +9,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 메서드 명을 적어주면 연결되고 해당 쿼리문이 동작하게 될때 반환 타입으로 Dto클래스를 리턴할
 것임으로 해당 dto의 경로를 적어준다. -->
 <mapper namespace="com.study.springboot.dao.IBoardDao">
+	<!-- 댓글 리스트 확인 -->
+	<select id="reply_list" resultType="com.study.springboot.dto.ReplyDto">
+		SELECT * FROM reply WHERE reply_board_idx = #{param1} ORDER BY reply_date DESC
+	</select>
+	
 	<select id="list" resultType="com.study.springboot.dto.BoardDto">
-		SELECT * FROM board order by board_date ASC
+		SELECT * FROM board order by board_date DESC
 	</select>
 	
 	<!-- 데이터 삽입 insert tag사용 반환값으로 int를 반환함 성공 1 실패 0 -->
@@ -29,5 +34,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE FROM board WHERE board_idx=#{param1}
 	</delete>
 	
+	<!-- 글 수정 -->
+	<update id="updateboard">
+		UPDATE board SET board_name = #{param2}, board_title = #{param3}, board_content = #{param4}, board_hit = #{param5} WHERE board_idx = #{param1} 
+	</update>
 	
+	<!-- 글 조회수 증가 -->
+	<update id="hit">
+		UPDATE board SET board_hit = board_hit + 1 WHERE board_idx  = #{param1}
+	</update>
+	
+	<!-- 댓글 등록 -->
+	<insert id="replyWrite">
+		INSERT INTO reply(reply_idx, reply_name, reply_content, reply_date, reply_board_idx)
+		VALUES(reply_board_seq.nextval, #{param1}, #{param2}, SYSDATE, #{param3})
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply">
+		DELETE FROM reply WHERE reply_idx = #{param1}
+	</delete>
 </mapper>
